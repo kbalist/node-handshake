@@ -4,8 +4,10 @@ body {
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
 header, footer{background-color:lightgreen;}
-#messages{float:right;width:200px;background:lightblue;}
+#rightCol{float:right;width:200px;background:lightblue;}
+#leftCol{margin-right:200px;}
 
+#leftCol section{ float:left;width:120px; height:120px;border:1px solid grey;}
 
 a {
   color: #00B7FF;
