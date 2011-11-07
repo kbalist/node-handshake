@@ -1,13 +1,10 @@
-<pre id="messages" style="max-height:300px; overflow:auto;">
+<p>Hello, <%= username %></p>
+
+<pre id="messages" style="max-height:300px; overflow:auto;"></pre>
 <form method="post" id="message-form">
   <input type="text" placeholder="Type your message" id="message-input" name="message" autofocus required>
   <input type="submit" value="OK">
 </form>
-</pre>
-
-<p>Hello, <%= username %></p>
-
-
  
 <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">

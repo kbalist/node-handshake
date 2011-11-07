@@ -97,8 +97,8 @@ function getDevice(ua){
 
 
 /**/
-function getMockup(){
-    var confpath = path.join(process.cwd(), 'mockup.json');  
+function getMockup(fileName){
+    var confpath = path.join(process.cwd(), 'mockups/' + fileName + '.json');  
     var fileContents = require('fs').readFileSync(confpath,'utf8'); 
     var schema = JSON.parse(fileContents);
     return schema;
@@ -202,7 +202,7 @@ sockets.on('connection', function (socket) {
   }
   sockets.in(socket.room).emit('join', device, Date.now());
   
-  sockets.in(socket.room).emit('model', getMockup() );
+  sockets.in(socket.room).emit('model', getMockup('media') );
   
   // Add connection to pool
   connections[sessionID][socket.id] = socket;
