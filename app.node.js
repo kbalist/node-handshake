@@ -1,10 +1,18 @@
 const path = require('path'),
       express = require('express'),
+      mockup = require('./mockups/mockup.node.js'),
       app = module.exports = express.createServer(),
       deviceDetector = require('./node_lib/deviceDetector.js'),
       port = process.env.PORT || 1337;
+
+      function getConf(filePath){
+          confpath = path.join(process.cwd(), filePath );  
+          var fileContents = require('fs').readFileSync(confpath,'utf8'); 
+          var schema = JSON.parse(fileContents);
+          return schema;
+      }
       
-var config = getJSON('conf.json');
+var config = getConf('./conf.json');
 console.log(config);
 
  
@@ -53,21 +61,6 @@ function requireLogin (req, res, next) {
     res.redirect("/login");
   }
 }
-
-/**/
-
-
-function getJSON(filePath){
-    var confpath = path.join(process.cwd(),filePath );  
-    var fileContents = require('fs').readFileSync(confpath,'utf8'); 
-    var schema = JSON.parse(fileContents);
-    return schema;
-}
-function getMockup(fileName){
-    return getJSON('mockups/' + fileName + '.json');
-}
-/**/
-
 
 /** Home page (requires authentication) */
 app.get('/', [requireLogin], function (req, res, next) {
