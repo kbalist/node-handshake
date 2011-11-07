@@ -159,7 +159,7 @@ sockets.on('connection', function (socket) {
   }
   sockets.in(socket.room).emit('join', device, Date.now());
   
-  sockets.in(socket.room).emit('model', getMockup('media') );
+  sockets.in(socket.room).emit('model', mockup.getMockup('media') );
   
   // Add connection to pool
   connections[sessionID][socket.id] = socket;

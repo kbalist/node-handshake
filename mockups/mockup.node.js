@@ -1,9 +1,11 @@
 /** Middleware for mockup management */
 
+var path = require('path'),
+    fs   = require('fs');
+
 function getMockup(fileName){
-    return getJSON('mockups/' + fileName + '.json');
     var confpath = path.join(process.cwd(), 'mockups', fileName + '.json' );  
-    var fileContents = require('fs').readFileSync(confpath,'utf8'); 
+    var fileContents = fs.readFileSync(confpath,'utf8'); 
     var schema = JSON.parse(fileContents);
     return schema;
 }

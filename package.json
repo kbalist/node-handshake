@@ -1,12 +1,8 @@
 {
-  "author": "Nicolas Chambrier <naholyr@gmail.com> (http://naholyr.fr)",
-  "name": "demo-chat",
+  "author": "",
+  "name": "NodeBook",
   "version": "0.0.0",
-  "homepage": "http://naholyr.fr/2011/07/authentification-et-websocket-avec-node-js-express-et-socket-io",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/naholyr/node-chat-socketio-handshake.git"
-  },
+  "homepage": "",
   "main": "app.js",
   "engines": {
     "node": ">= 0.4.0"
