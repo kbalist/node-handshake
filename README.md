@@ -1,7 +1,7 @@
 NodeRevolution
 ==============
 
-Powered by NodeJS & Socket.IO, this proto aim to build a realtime application.
+Powered by NodeJS & Socket.IO, this proto aim to build a realtime adress book.
 
 
 Install
@@ -12,5 +12,5 @@ npm install -d
 Events
 ------
 
-- getFiles(filters)
-- updateFiles(filters)
+- getContacts(filters)
+- updateContacts(filters)
