@@ -1,8 +1,12 @@
-const path = require('path')
-    , express = require('express')
-    , app = module.exports = express.createServer()
-    , port = process.env.PORT || 1337
-    ;
+const path = require('path'),
+      express = require('express'),
+      app = module.exports = express.createServer(),
+      deviceDetector = require('./node_lib/deviceDetector.js'),
+      port = process.env.PORT || 1337;
+      
+var config = getJSON('conf.json');
+console.log(config);
+
  
 /** Configuration */
 app.configure(function() {
@@ -34,7 +38,8 @@ app.get('/session-index', function (req, res, next) {
   req.session.index = (req.session.index || 0) + 1;
   res.render('session-index', {
     "index":  req.session.index,
-    "sessId": req.sessionID
+    "sessId": req.sessionID,
+    "userName": req.session.username
   });
 });
 
@@ -49,59 +54,17 @@ function requireLogin (req, res, next) {
   }
 }
 
-/** Middleware for device identification */
-function getDevice(ua){
-    var $ = {};
-
-    if (/mobile/i.test(ua)){
-        $.Mobile = true;
-        return 'mobile';
-    }
-    
-    if (/like Mac OS X/.test(ua)) {
-        $.iOS = /CPU( iPhone)? OS ([0-9\._]+) like Mac OS X/.exec(ua)[2].replace(/_/g, '.');
-        $.iPhone = /iPhone/.test(ua);
-        $.iPad = /iPad/.test(ua);
-        console.log( $.iOS );
-        console.log( $.iPhone );
-        console.log( $.iPad );
-        return 'ios';
-    }
-
-    if (/Android/.test(ua)){
-        $.Android = /Android ([0-9\.]+)[\);]/.exec(ua)[1];
-        console.log($.Android);
-        return 'android';
-    }
-
-    if (/webOS\//.test(ua)){
-        $.webOS = /webOS\/([0-9\.]+)[\);]/.exec(ua)[1];
-        console.log( $.webOS );
-        return 'webos';
-    }
-
-    if (/(Intel|PPC) Mac OS X/.test(ua)){
-        $.Mac = /(Intel|PPC) Mac OS X ?([0-9\._]*)[\)\;]/.exec(ua)[2].replace(/_/g, '.') || true;
-        console.log( $.Mac );
-        return 'mac'
-    }
-
-
-    if (/Windows NT/.test(ua)){
-        $.Windows = /Windows NT ([0-9\._]+)[\);]/.exec(ua)[1];
-        console.log( $.Windows );
-        return 'windows';
-    }
-    return 'undefined';
-}
-
-
 /**/
-function getMockup(fileName){
-    var confpath = path.join(process.cwd(), 'mockups/' + fileName + '.json');  
+
+
+function getJSON(filePath){
+    var confpath = path.join(process.cwd(),filePath );  
     var fileContents = require('fs').readFileSync(confpath,'utf8'); 
     var schema = JSON.parse(fileContents);
     return schema;
+}
+function getMockup(fileName){
+    return getJSON('mockups/' + fileName + '.json');
 }
 /**/
 
@@ -135,7 +98,7 @@ app.post("/login", function (req, res) {
       if (!err) {
         var found = false;
         for (var i=0; i<sessions.length; i++) {
-          break; //cheat to permit multiple connexions
+break; //cheat to permit multiple connexions
           var session = JSON.parse(sessions[i]);
           if (session.username == req.body.username) {
             err = "User name already used by someone else";
@@ -149,7 +112,8 @@ app.post("/login", function (req, res) {
         res.render("login", options);
       } else {
         req.session.username = req.body.username;
-        req.session.device = getDevice( req.headers['user-agent'] );
+        console.log( 'isMobile : '+ deviceDetector.isMobile( req.headers['user-agent'] ) )
+        req.session.device = deviceDetector.isMobile( req.headers['user-agent'] );
         res.redirect("/");
       }
     });
