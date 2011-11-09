@@ -55,7 +55,8 @@ function addMessage(username, message, time) {
 function addItems(items) {
     console.log(items);
     for(i=0; i<items.length; i++){
-        itemsArea.append('<section>' + items[i].name + '</section>');
+        itemsArea.append('<section class="media"><img src="/images/media.png" alt="' + items[i].name + '"><h1>' + items[i].name + '</h1><div class="tools"><button>X</button></div></section>');
+        
     }
 }
 
