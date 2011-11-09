@@ -1,13 +1,16 @@
 /** Middleware for device identification */
 
-var isMobile = function(ua){
+var getInfos = function(ua){
 
         var $ = {},
-            mobileVersion = false;
+            response = {
+                isMobile : false,
+                type : 'undefined'
+            };
 
         if (/mobile/i.test(ua)){
 //            $.Mobile = true;
-            mobileVersion = true
+            response.isMobile = true
         }
 
         if (/like Mac OS X/.test(ua)) {
@@ -17,33 +20,38 @@ var isMobile = function(ua){
             console.log( $.iOS );
             console.log( $.iPhone );
             console.log( $.iPad );
-            mobileVersion = true;
+            response.isMobile = true;
+            response.type = 'IOS';
         }
 
         if (/Android/.test(ua)){
             $.Android = /Android ([0-9\.]+)[\);]/.exec(ua)[1];
             console.log($.Android);
-            mobileVersion = true;
+            response.isMobile = true;
+            response.type = 'android';
         }
 
         if (/webOS\//.test(ua)){
             $.webOS = /webOS\/([0-9\.]+)[\);]/.exec(ua)[1];
             console.log( $.webOS );
-            mobileVersion = true;
+            response.isMobile = true;
+            response.type = 'webos';
         }
 
         if (/(Intel|PPC) Mac OS X/.test(ua)){
             $.Mac = /(Intel|PPC) Mac OS X ?([0-9\._]*)[\)\;]/.exec(ua)[2].replace(/_/g, '.') || true;
             console.log( $.Mac );
-            mobileVersion = false;
+            response.isMobile = false;
+            response.type = 'mac';
         }
 
 
         if (/Windows NT/.test(ua)){
             $.Windows = /Windows NT ([0-9\._]+)[\);]/.exec(ua)[1];
             console.log( $.Windows );
-            mobileVersion = false;
+            response.isMobile = false;
+            response.type = 'windows';
         }
-        return mobileVersion;
+        return response;
 }
-exports.isMobile = isMobile;
+exports.getInfos = getInfos;

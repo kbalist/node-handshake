@@ -7,10 +7,15 @@ h1{margin:0;}
 
 
 header, footer{background-color:lightgreen;clear:both;}
-#rightCol{float:right;width:200px;background:lightblue;}
-#leftCol{margin-right:200px;}
+#toolbar{background:lightgrey;}
+#rightCol{float:right;width:240px;background:lightgreen;}
+#leftCol{margin-right:240px;}
 
 #leftCol section{ float:left;width:120px; height:120px;border:1px solid grey;}
+
+#rightCol .tool{float:none;}
+
+
 
 a {
   color: #00B7FF;

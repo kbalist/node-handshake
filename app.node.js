@@ -105,8 +105,9 @@ break; //cheat to permit multiple connexions
         res.render("login", options);
       } else {
         req.session.username = req.body.username;
-        console.log( 'isMobile : '+ deviceDetector.isMobile( req.headers['user-agent'] ) )
-        req.session.device = deviceDetector.isMobile( req.headers['user-agent'] );
+        var deviceInfo = deviceDetector.getInfos( req.headers['user-agent']);
+        console.log( 'isMobile : '+ deviceInfo.isMobile )
+        req.session.device = deviceInfo.type;
         res.redirect("/");
       }
     });
@@ -116,7 +117,9 @@ break; //cheat to permit multiple connexions
 /** WebSocket */
 var sockets = require('socket.io').listen(app).of('/chat');
 const parseCookie = require('connect').utils.parseCookie;
+
 sockets.authorization(function (handshakeData, callback) {
+    var fields = ['username','device'];
   var cookies = parseCookie(handshakeData.headers.cookie);  // Read cookies from handshake headers
   var sessionID = cookies['connect.sid'];  // We're now able to retrieve session ID
   if (!sessionID) {
@@ -127,6 +130,9 @@ sockets.authorization(function (handshakeData, callback) {
     // On récupère la session utilisateur, et on en extrait son username
     app.sessionStore.get(sessionID, function (err, session) {
       if (!err && session) {
+          for(i=0; i<fields.length; i++){
+              
+          }
           if(session.device){
               handshakeData.device = session.device; // On stocke ce username dans les données de l'authentification
           }
@@ -147,7 +153,6 @@ sockets.on('connection', function (socket) {
   var sessionID = socket.handshake.sessionID; // Store session ID from handshake
   var username = socket.handshake.username; // Same here, to allow event "bye" with username
   var device = socket.handshake.device;
-  
   // create room per user 
   socket.room = username;
   socket.join(socket.room);
@@ -155,9 +160,10 @@ sockets.on('connection', function (socket) {
   if ('undefined' == typeof connections[sessionID]) {
     connections[sessionID] = { "length": 0 };
     // First connection
-    sockets.in(socket.room).emit('join', 'yataa', Date.now());
+//    sockets.in(socket.room).emit('join', 'yataa', Date.now());
   }
   sockets.in(socket.room).emit('join', device, Date.now());
+  
   
   sockets.in(socket.room).emit('model', mockup.getMockup('media') );
   
@@ -183,7 +189,13 @@ sockets.on('connection', function (socket) {
   });
   // New message from client = "write" event
   socket.on('write', function (message) {
+      console.log(username + ' : ' + message);
     sockets.in(socket.room).emit('message', username, message, Date.now());
+  });
+  // New search from client = "write" event
+  socket.on('search', function (query) {
+      console.log(username + ' search for ' + query);
+    sockets.in(socket.room).emit('message', username, query, Date.now());
   });
 });
 
