@@ -1,36 +1,45 @@
 var searchControl = {
     formId : '#search-form',
     searchBarId : '#search-bar',
-    reset : function(){
-        socket.emit('resetSearch');
-        this.hideSearchBar();
-    },
-    showSearchBar : function(query){
-        $(this.searchBarId+' span').html("Results for '" + query + "'");
+    searchInput : '#search-input',
+    query : function(searchValue){
+        socketControl.search( searchValue );
+        $(this.searchBarId+' span').html("Results for '" + searchValue + "'");
         $(this.searchBarId).show();
     },
-    hideSearchBar : function(){
-        $(this.searchBarId).hide();        
+    reset : function(){
+        socketControl.resetSearch();
+        $(this.searchBarId).hide();
+        $(this.searchInput).val('');
     }
-}
+};
+
+var socketControl = {
+    write : function(msg){
+        socket.emit('write', msg);
+    },
+    search : function(){
+        
+    },
+    resetSearch : function(){
+        
+    },
+};
+
 /* locators */
-
-
 var messagesArea = $('#messages');
 var itemsArea = $('#leftCol');
 
 /* Form */
 $('#message-form').submit(function () {
     var messageInput = $('#message-input');
-    socket.emit('write', messageInput.val());
+    socketControl.write( messageInput.val() );
     messageInput.val('');
     return false;
 })
 $('#search-form').submit(function () {
     var searchValue = $('#search-input').val();
-    socket.emit('search', searchValue);
-    searchControl.showSearchBar(searchValue);
-    $('#search-input').val('');
+    searchControl.query( searchValue );
     return false;
 });
 $('#search-bar a').click(function(e){
@@ -39,12 +48,7 @@ $('#search-bar a').click(function(e){
 
 /* Display */
 function addMessage(username, message, time) {
-  if (typeof time != 'string') {
-    var date = new Date(time);
-    time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-  }
-  var line = '[' + time + '] <strong>' + username + '</strong>: ' + message + '<br />';
-  messagesArea.prepend( line );
+    $.jGrowl('<strong>' + username + '</strong>: ' + message, { life: 10000 });
 }
 
 /* Display */

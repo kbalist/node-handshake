@@ -50,6 +50,10 @@ app.get('/session-index', function (req, res, next) {
     "userName": req.session.username
   });
 });
+app.get('/tpl/:tpl', function (req, res, next) {
+  req.session.index = (req.session.index || 0) + 1;
+  res.render(tpl, getMockup(session));
+});
 
 /** Middleware for limited access */
 function requireLogin (req, res, next) {
