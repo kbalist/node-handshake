@@ -8,14 +8,15 @@ h1{margin:0;}
 
 header, footer{background-color:lightgreen;clear:both;}
 #toolbar{background:lightgrey;}
-#rightCol{float:right;width:240px;background:lightgreen;}
+#rightCol{float:right;width:240px;background:lightgreen;clear:both;}
 #leftCol{margin-right:240px;}
 
 #leftCol section{ float:left;width:120px; height:120px;border:1px solid grey;}
 
 #rightCol .tool{float:none;}
 
-
+#search-bar{float:none;clear:both;display:none;}
+#search-bar a{float:right;}
 
 a {
   color: #00B7FF;

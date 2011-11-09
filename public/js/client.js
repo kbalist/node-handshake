@@ -1,4 +1,18 @@
-
+var searchControl = {
+    formId : '#search-form',
+    searchBarId : '#search-bar',
+    reset : function(){
+        socket.emit('resetSearch');
+        this.hideSearchBar();
+    },
+    showSearchBar : function(query){
+        $(this.searchBarId+' span').html("Results for '" + query + "'");
+        $(this.searchBarId).show();
+    },
+    hideSearchBar : function(){
+        $(this.searchBarId).hide();        
+    }
+}
 /* locators */
 
 
@@ -13,10 +27,14 @@ $('#message-form').submit(function () {
     return false;
 })
 $('#search-form').submit(function () {
-    var searchInput = $('#search-input');
-    socket.emit('search', searchInput.val());
-    searchInput.val('');
+    var searchValue = $('#search-input').val();
+    socket.emit('search', searchValue);
+    searchControl.showSearchBar(searchValue);
+    $('#search-input').val('');
     return false;
+});
+$('#search-bar a').click(function(e){
+    searchControl.reset();
 });
 
 /* Display */
@@ -31,12 +49,15 @@ function addMessage(username, message, time) {
 
 /* Display */
 function addItems(items) {
+    console.log(items);
     for(i=0; i<items.length; i++){
-        itemsArea.append('<section>' + item.name + '</section>');
+        itemsArea.append('<section>' + items[i].name + '</section>');
     }
 }
 
-
+function resetItems(){
+    itemsArea.empty();
+}
 
 ////////////////////////////////////////////////////////////////
 //
@@ -71,11 +92,17 @@ socket
 .on('error', function (error) {
     // an error occured
     location.reload();
-    alert('BIG Error: ' + error);
+//    alert('BIG Error: ' + error);
 })
-
+.on('search', function (model) {
+    resetItems();
+    addItems(model);
+})
 .on('model', function (model) {
-//	console.log(model);
-addItems(model)
+    addItems(model)
+})
+.on('newmodel', function (model) {
+     resetItems();
+    addItems(model)
 })
 

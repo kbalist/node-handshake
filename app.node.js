@@ -195,8 +195,13 @@ sockets.on('connection', function (socket) {
   // New search from client = "write" event
   socket.on('search', function (query) {
       console.log(username + ' search for ' + query);
-    sockets.in(socket.room).emit('message', username, query, Date.now());
+    sockets.in(socket.room).emit('search',  mockup.getMockup('search'));
   });
+  // New resetSearch from client
+  socket.on('resetSearch', function () {
+    sockets.in(socket.room).emit('newmodel', mockup.getMockup('media') );
+  });
+  
 });
 
 /** Start server */
