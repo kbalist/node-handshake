@@ -8,9 +8,11 @@ h1{margin:0;}
 header, #toolbar, footer{position:fixed;width:100%;background-color:lightgreen;clear:both;z-index:300;}
 header{top:0;height:20px;}
 footer{bottom:0;}
+
 #toolbar{background:lightgrey;top:20px;}
+#main{margin:60px 0 40px 0;}
 #rightCol{float:right;width:240px;background:lightgreen;clear:both;}
-#leftCol{margin:60px 240px 40px 0;}
+#leftCol{margin-right:240px;}
 
 #leftCol section{ float:left;width:120px; height:120px;border:1px solid grey;}
 
